@@ -1,13 +1,17 @@
 package amor.library.library;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +38,12 @@ public class BookService {
     public String addBook(BookDto bookDto) {
         try {
             if (!bookRepository.existsBookByTitleEqualsIgnoreCase(bookDto.getName())) {
+                byte[] decodePdf = Base64.getDecoder().decode(bookDto.getPdfBookFile());
                 Book book = Book.builder()
                         .title(bookDto.getName())
                         .author(bookDto.getAuthor())
                         .description(bookDto.getDescription())
-                        .pdfBook(bookDto.getPdfBookFile().getBytes())
+                        .pdfBook(decodePdf)
                         .build();
                 bookRepository.save(book);
                 return "Kitob salandi :)";
@@ -46,6 +51,7 @@ public class BookService {
                 return "Kitob mavjud";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return "error :(";
         }
     }
@@ -94,22 +100,21 @@ public class BookService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadPdf(int id){
+    public ResponseEntity<Resource> downloadPdf(int id){
         try {
             Optional<Book> book = bookRepository.findById(id);
             if (book.isPresent() && book.get().getPdfBook() != null) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + book.get().getTitle() + ".pdf");
+                byte[] pdfContent = book.get().getPdfBook(); // Bu metodni yozishingiz kerak
+                ByteArrayResource resource = new ByteArrayResource(pdfContent);
                 return ResponseEntity.ok()
-                        .headers(headers)
-                        .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
-                        .body(book.get().getPdfBook());
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=book_" + id + ".pdf")
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e){
             System.err.println(e.getMessage());
-            ResponseEntity<byte[]> ResponseEntity = null;
-            return ResponseEntity;
+            return null;
         }
     }
 }

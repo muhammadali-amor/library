@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class BookDto {
     private int id;
     private String name;
@@ -15,5 +16,5 @@ public class BookDto {
     private String description;
     private String enter;
     private byte[] pdfBook;
-    private MultipartFile pdfBookFile;
+    private String pdfBookFile;
 }
