@@ -99,22 +99,4 @@ public class BookService {
             return "error  :(";
         }
     }
-
-    public ResponseEntity<Resource> downloadPdf(int id){
-        try {
-            Optional<Book> book = bookRepository.findById(id);
-            if (book.isPresent() && book.get().getPdfBook() != null) {
-                byte[] pdfContent = book.get().getPdfBook(); // Bu metodni yozishingiz kerak
-                ByteArrayResource resource = new ByteArrayResource(pdfContent);
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=book_" + id + ".pdf")
-                        .contentType(MediaType.APPLICATION_PDF)
-                        .body(resource);
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e){
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
 }
