@@ -46,7 +46,7 @@ public class BookService {
                         .pdfBook(decodePdf)
                         .build();
                 bookRepository.save(book);
-                return "Kitob salandi :)";
+                return "Kitob saqlandi :)";
             } else {
                 return "Kitob mavjud";
             }
