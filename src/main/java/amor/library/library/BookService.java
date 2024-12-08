@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpHeaders;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -71,12 +67,18 @@ public class BookService {
                     }
                     case "author" -> {
                         book.setAuthor(bookDto.getAuthor());
+                        bookRepository.save(book);
+                        return "Kitob aftori taxrirlandi";
                     }
                     case "description" -> {
                         book.setDescription(bookDto.getAuthor());
+                        bookRepository.save(book);
+                        return "Kitob tavsifi taxrirlandi";
                     }
                     case "pdf" -> {
                         book.setPdfBook(bookDto.getPdfBookFile().getBytes());
+                        bookRepository.save(book);
+                        return "Kitob fayli taxrirlandi";
                     }
                     default -> {
                         return "Bunaqa yo'nalish yo'q";
@@ -85,7 +87,6 @@ public class BookService {
             } else {
                 return "Nimani taxrirlash buyrug'i kelmadi?";
             }
-            return "-{}-";
         } catch (Exception e) {
             return "error  :(";
         }
