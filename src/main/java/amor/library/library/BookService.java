@@ -24,7 +24,7 @@ public class BookService {
                     .name(book.getTitle())
                     .author(book.getAuthor())
                     .description(book.getDescription())
-                    .pdfBook(book.getPdfBook())
+                    .pdfBookFileName(book.getBookFileName())
                     .build();
             bookDtos.add(build);
         }
@@ -34,12 +34,11 @@ public class BookService {
     public String addBook(BookDto bookDto) {
         try {
             if (!bookRepository.existsBookByTitleEqualsIgnoreCase(bookDto.getName())) {
-                byte[] decodePdf = Base64.getDecoder().decode(bookDto.getPdfBookFile());
                 Book book = Book.builder()
                         .title(bookDto.getName())
                         .author(bookDto.getAuthor())
                         .description(bookDto.getDescription())
-                        .pdfBook(decodePdf)
+                        .bookFileName(bookDto.getPdfBookFileName())
                         .build();
                 bookRepository.save(book);
                 return "Kitob saqlandi :)";
@@ -76,7 +75,7 @@ public class BookService {
                         return "Kitob tavsifi taxrirlandi";
                     }
                     case "pdf" -> {
-                        book.setPdfBook(bookDto.getPdfBookFile().getBytes());
+                        book.setBookFileName(bookDto.getPdfBookFileName());
                         bookRepository.save(book);
                         return "Kitob fayli taxrirlandi";
                     }

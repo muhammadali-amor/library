@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/files")
 public class FileController {
 
@@ -71,8 +72,8 @@ public class FileController {
         }
     }
 
-    @GetMapping("/{type}/{fileName}")
-    public ResponseEntity<Resource> getFile(@PathVariable String type, @PathVariable String fileName) {
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
         try {
             Path filePath = Paths.get(uploadPdfDir).resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());

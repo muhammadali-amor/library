@@ -22,15 +22,15 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBook());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getBookPdf(@PathVariable int id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("get Book"));
-        byte[] pdfData = book.getPdfBook();
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"book.pdf\"") // Faylni ko'rsatish uchun 'inline' ishlatiladi
-                .body(pdfData);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<byte[]> getBookPdf(@PathVariable int id) {
+//        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("get Book"));
+//        byte[] pdfData = book.getPdfBook();
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.APPLICATION_PDF)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"book.pdf\"") // Faylni ko'rsatish uchun 'inline' ishlatiladi
+//                .body(pdfData);
+//    }
 
 
     @PostMapping

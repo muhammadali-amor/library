@@ -15,6 +15,5 @@ public class BookDto {
     private String author;
     private String description;
     private String enter;
-    private byte[] pdfBook;
-    private String pdfBookFile;
+    private String pdfBookFileName;
 }
