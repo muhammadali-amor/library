@@ -32,7 +32,7 @@ public class FileController {
 //    @Value("${file.upload-video-dir}")
 //    private String uploadVideoDir;
 
-    // Rasmlar va videolarni yuklash uchun umumiy metod
+    // Rasmlar va videolarni va filelarni yuklash uchun umumiy metod
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         // Fayl turi bo'yicha saqlash papkasini tanlang
@@ -51,18 +51,15 @@ public class FileController {
                     .body("Fayl hajmi juda katta. Maksimal hajm 100MB.");
         }
 
-        // Fayl nomini o'zgartirish uchun unikal ID yaratish
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path filePath = Paths.get(uploadDir + fileName);
 
         try {
-            // Papkani yaratish
             File dir = new File(uploadDir);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            // Faylni saqlash
             Files.write(filePath, file.getBytes());
             return ResponseEntity.ok(fileName);
         } catch (IOException e) {
@@ -80,7 +77,7 @@ public class FileController {
 
             if (resource.exists()) {
                 return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_PDF)  // PDF faylni o'qish uchun
+                        .contentType(MediaType.APPLICATION_PDF)
                         .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
